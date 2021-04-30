@@ -8,6 +8,11 @@ There's 2 server running
 Main is public exposed.
 Sub is internal service as an API.
 
+## Prequisted
+- Docker
+- Kubernetes
+- Nginx Ingress
+
 ## Setup
 ```bash
 ./setup.sh
@@ -18,7 +23,7 @@ Sub is internal service as an API.
 cd k8s
 ./up.sh
 
-// Test
+# Test
 curl localhost:30001
 ```
 
