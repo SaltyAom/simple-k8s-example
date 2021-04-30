@@ -45,13 +45,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: main-balancer
+  name: main-service
 spec:
-  type: NodePort
-  clusterIP: 10.97.0.1
   selector:
     app: node-main
   ports:
   - port: 3000
     targetPort: 3000
-    nodePort: 30001
