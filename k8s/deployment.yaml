@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-main-config
+data:
+  msg: Hello World
+  node-api-address: 10.97.0.2:3001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-main
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: node-main
+  template:
+    metadata:
+      labels:
+        app: node-main
+    spec:
+      containers:
+      - name: node-main
+        image: node-docker
+        imagePullPolicy: Never
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 3000
+        env:
+          - name: message
+            valueFrom:
+              configMapKeyRef:
+                name: node-main-config
+                key: msg
+          - name: api
+            valueFrom:
+              configMapKeyRef:
+                name: node-main-config
+                key: node-api-address
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-balancer
+spec:
+  type: NodePort
+  clusterIP: 10.97.0.1
+  selector:
+    app: node-main
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30001
